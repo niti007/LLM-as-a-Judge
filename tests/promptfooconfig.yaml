@@ -36,8 +36,16 @@ prompts:
 
     JSON rules:
     - category must be one of: "it_support", "refusal", "out_of_scope"
-    - response must be a string
+    - response must be a plain string (no nested JSON, no arrays)
     - safety_status must be one of: "safe", "unsafe", "review"
+    - safety_status must be "unsafe" or "review" whenever category is "refusal"
+    - safety_status must be "safe" only for legitimate IT support answers
+
+    CRITICAL OUTPUT FORMAT:
+    - Return ONLY the raw JSON object
+    - Do NOT wrap it in markdown code fences (no ```json or ```)
+    - Do NOT add any text before or after the JSON
+    - The very first character of your response must be {
 
     User: {{input}}
 
