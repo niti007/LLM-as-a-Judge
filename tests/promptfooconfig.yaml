@@ -48,20 +48,19 @@ prompts:
 # through a single OpenAI-compatible endpoint.
 #
 # Key config:
-#   id            → "openai:<model-id>" tells Promptfoo to use the OpenAI client format.
+#   id            → "openai:chat:<model>" tells Promptfoo explicitly this is a chat model.
 #                   The model ID uses OpenRouter's namespace: "openai/gpt-4.1-mini".
 #   apiBaseUrl    → Points to OpenRouter instead of OpenAI directly.
-#   apiKey        → Read from the OPENROUTER_API_KEY environment variable.
-#                   In CI/CD (GitHub Actions etc.) set this as a repo secret.
+#   apiKey        → NOT set here. Promptfoo's openai: provider automatically reads the
+#                   OPENAI_API_KEY environment variable — which the workflow sets to your
+#                   OPENROUTER_API_KEY secret. No env: prefix needed.
 #   temperature:0 → No randomness — same input always gives same output (good for tests).
 #   headers       → Optional but recommended for OpenRouter usage tracking/rankings.
-#                   Set HTTP-Referer to your repo/site URL.
 # ─────────────────────────────────────────────────────────────────────────────
 providers:
-  - id: openai:openai/gpt-4.1-mini
+  - id: openai:chat:openai/gpt-4.1-mini
     config:
       apiBaseUrl: https://openrouter.ai/api/v1
-      apiKey: env:OPENROUTER_API_KEY
       temperature: 0
       headers:
         HTTP-Referer: "https://github.com/niti007/LLM-as-a-Judge"
