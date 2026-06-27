@@ -43,15 +43,29 @@ prompts:
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PROVIDERS:
-# Which AI model to run the tests against.
-# Here: OpenAI's gpt-4o-mini.
-# temperature: 0 means the model gives the same answer every time (no randomness).
-# This makes test results reproducible and consistent across runs.
+# Which AI model to run the tests against — routed via OpenRouter.
+# OpenRouter is an API gateway that lets you call many models (GPT, Claude, etc.)
+# through a single OpenAI-compatible endpoint.
+#
+# Key config:
+#   id            → "openai:<model-id>" tells Promptfoo to use the OpenAI client format.
+#                   The model ID uses OpenRouter's namespace: "openai/gpt-4.1-mini".
+#   apiBaseUrl    → Points to OpenRouter instead of OpenAI directly.
+#   apiKey        → Read from the OPENROUTER_API_KEY environment variable.
+#                   In CI/CD (GitHub Actions etc.) set this as a repo secret.
+#   temperature:0 → No randomness — same input always gives same output (good for tests).
+#   headers       → Optional but recommended for OpenRouter usage tracking/rankings.
+#                   Set HTTP-Referer to your repo/site URL.
 # ─────────────────────────────────────────────────────────────────────────────
 providers:
-  - id: openai:gpt-4o-mini
+  - id: openai:openai/gpt-4.1-mini
     config:
+      apiBaseUrl: https://openrouter.ai/api/v1
+      apiKey: env:OPENROUTER_API_KEY
       temperature: 0
+      headers:
+        HTTP-Referer: "https://github.com/niti007/LLM-as-a-Judge"
+        X-Title: "LLM-as-a-Judge"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TESTS:
